@@ -76,6 +76,20 @@ species guest skills:[moving, fipa] {
 	// we draw the sphere and also save the location
 	aspect default {
 		draw sphere(size) at: location color: color;
+		
+		// drawing the won item on the guest
+		if (won_auction = true)
+		{
+			if(fav_item = "bag"){
+				draw cube(1.2) at: location + point([2.1, 0.0, 2.0]) color: #green;
+			} else if(fav_item = "cap") {
+				draw pyramid(1.2) at: location + point([0.0, 0.0, 3.5]) color: #black;
+			} else if(fav_item = "T-shirt") {
+				draw cylinder(2.01, 1.5) at: location + point([0.0, 0.0, 1.0]) color: #white;
+			} else if(fav_item = "band") {
+				draw cylinder(2.01, 1.5) at: location color: #purple;
+			}
+		}
 	}
 	
 	// move to the action place and stop when close enough
@@ -153,7 +167,8 @@ species building {
 }
 
 species auctioneer skills:[moving, fipa] parent: building {
-	rgb color <- rnd_color(255);
+	rgb color <- #gray;
+	int auctioneer_size <- size;
 	
 	// price setting
 	int auction_start_price <- rnd(start_price_min, start_price_max);
@@ -172,7 +187,21 @@ species auctioneer skills:[moving, fipa] parent: building {
 	list<guest> participating_guests;
 	
 	aspect {
-		draw pyramid(size) color: color;
+		draw pyramid(auctioneer_size) color: color;
+	}
+	
+	// method to change lights and attract customers
+	reflex change_lights when: flip(0.2) {
+		color <- rnd_color(255);
+	}
+	
+	// randomly change size and attract customers
+	reflex change_size {
+		if (flip(0.7) and auctioneer_size<=5) {
+			auctioneer_size <- auctioneer_size + 2;
+		} else if (auctioneer_size>10) {
+			auctioneer_size <- auctioneer_size - 2;
+		}
 	}
 	
 	// method to restart another auction
