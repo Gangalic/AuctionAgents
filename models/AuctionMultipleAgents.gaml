@@ -11,7 +11,7 @@ global {
 	/** Insert the global definitions, variables and actions here */
 	
 	int nb_guests <- rnd(10) + 10; // between 10 and 20 guests
-	int nb_auctioneers <- 1;
+	int nb_auctioneers <- 3;
 	int size_building <- 5; // buildings are going to be of size 5 and guests of 2
 	float speed_guest <- 0.5;
 	
